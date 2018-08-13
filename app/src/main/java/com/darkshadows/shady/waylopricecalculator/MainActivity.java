@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,9 +18,13 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
-    Float hotelprice, discount, duration, tax, rooms, hotelpricecal, afterdurationcal, taxcal, hoteltotalcal, waylototalcal, discountcal;
+    Float hotelprice, discount, duration, tax, rooms;
+    Float hotelpricecal, afterdurationcal, taxcal, hoteltotalcal, waylototalcal, discountcal;
     TextView textViewHotelPrice, textViewDiscount, textViewDuration, textViewTax, textViewTotalPrice;
     Button buttonCalculate;
+
+    RadioGroup radioGroup;
+    RadioButton radioPerNight, radioTotalTax;
 
     private TextInputLayout editTextHotelPrice;
     private TextInputLayout editTextDiscount;
@@ -43,7 +49,14 @@ public class MainActivity extends AppCompatActivity {
         editTextTax = (TextInputLayout) findViewById(R.id.etTax);
         editTextRooms = (TextInputLayout) findViewById(R.id.etRooms);
 
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+
+        radioPerNight = (RadioButton) findViewById(R.id.radioPerNight);
+        radioTotalTax = (RadioButton) findViewById(R.id.radioTotalTax);
+
         buttonCalculate = (Button) findViewById(R.id.btnCalculate);
+
+        //CalculateButtonFunction
 
         buttonCalculate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,21 +78,38 @@ public class MainActivity extends AppCompatActivity {
                     validateRooms();
 
                     hotelprice = Float.parseFloat(editTextHotelPrice.getEditText().getText().toString());
-//                    editTextDiscount.setText("0.92");
                     discount = Float.parseFloat(editTextDiscount.getEditText().getText().toString());
-                    hotelpricecal = hotelprice * discount;
-                    textViewHotelPrice.setText(new DecimalFormat("##.##").format(hotelpricecal));
                     duration = Float.parseFloat(editTextDuration.getEditText().getText().toString());
-                    afterdurationcal = hotelpricecal * duration;
-                    textViewDuration.setText(new DecimalFormat("##.##").format(afterdurationcal));
                     tax = Float.parseFloat(editTextTax.getEditText().getText().toString());
                     rooms = Float.parseFloat(editTextRooms.getEditText().getText().toString());
-                    taxcal = tax * duration;
-                    textViewTax.setText(new DecimalFormat("##.##").format(taxcal));
+
+                    hotelpricecal = hotelprice - (hotelprice * discount / 100);
+                    textViewHotelPrice.setText(new DecimalFormat("##.##").format(hotelpricecal));
+
+                    afterdurationcal = hotelpricecal * duration;
+                    textViewDuration.setText(new DecimalFormat("##.##").format(afterdurationcal));
+
+                    int id = radioGroup.getCheckedRadioButtonId();
+
+                    switch (id) {
+                        case R.id.radioPerNight:
+                            taxcal = tax * duration;
+                            textViewTax.setText(new DecimalFormat("##.##").format(taxcal));
+                            break;
+
+                        case R.id.radioTotalTax:
+                            taxcal = tax;
+                            textViewTax.setText(new DecimalFormat("##.##").format(taxcal));
+                            break;
+                    }
+
                     waylototalcal = (afterdurationcal + taxcal) * rooms;
                     textViewTotalPrice.setText(new DecimalFormat("##.##").format(waylototalcal));
+
                     discountcal = ((hotelprice * duration + taxcal) * rooms) - waylototalcal;
                     textViewDiscount.setText(new DecimalFormat("##.##").format(discountcal));
+
+                    //ExpediaTotal
                     hoteltotalcal = (hotelprice * duration) + taxcal;
                 }
             }
@@ -87,40 +117,44 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onClickHotelPrice(View view) {
-        ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+    //CopyToClipboard
+
+    public void onClickHotelPriceTextView(View view) {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("simple text", textViewHotelPrice.getText());
         clipboardManager.setPrimaryClip(clip);
         Toast.makeText(getApplicationContext(), "Copied to clipboard.", Toast.LENGTH_SHORT).show();
     }
 
-    public void onClickDiscount(View view) {
-        ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+    public void onClickDiscountTextView(View view) {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("simple text", textViewDiscount.getText());
         clipboardManager.setPrimaryClip(clip);
         Toast.makeText(getApplicationContext(), "Copied to clipboard.", Toast.LENGTH_SHORT).show();
     }
 
-    public void onClickDuration(View view) {
-        ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+    public void onClickDurationTextView(View view) {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("simple text", textViewDuration.getText());
         clipboardManager.setPrimaryClip(clip);
         Toast.makeText(getApplicationContext(), "Copied to clipboard.", Toast.LENGTH_SHORT).show();
     }
 
-    public void onClickTax(View view) {
-        ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+    public void onClickTaxTextView(View view) {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("simple text", textViewTax.getText());
         clipboardManager.setPrimaryClip(clip);
         Toast.makeText(getApplicationContext(), "Copied to clipboard.", Toast.LENGTH_SHORT).show();
     }
 
-    public void onClickTotalPrice(View view) {
-        ClipboardManager clipboardManager = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+    public void onClickTotalPriceTextView(View view) {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("simple text", textViewTotalPrice.getText());
         clipboardManager.setPrimaryClip(clip);
         Toast.makeText(getApplicationContext(), "Copied to clipboard.", Toast.LENGTH_SHORT).show();
     }
+
+    //ValidationToCheckIfFieldsAreNotEmpty
 
     public boolean validateHotelPrice() {
         String stringHotelPrice = editTextHotelPrice.getEditText().getText().toString().trim();
@@ -182,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //ToClearFields
+
     public void onClickClearFields(View view) {
         if (editTextHotelPrice.getEditText().getText().toString().isEmpty() && editTextDiscount.getEditText().getText().toString().isEmpty() && editTextDuration.getEditText().getText().toString().isEmpty() && editTextTax.getEditText().getText().toString().isEmpty() && editTextRooms.getEditText().getText().toString().isEmpty()) {
             Toast.makeText(this, "Fields are already empty!", Toast.LENGTH_SHORT).show();
@@ -194,13 +230,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //ToShareResultDataStoredOnTextViews
 
     public void onClickShare(View view) {
         Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "Expedia = " + hoteltotalcal + "\nWaylo = " + waylototalcal + "\nYou save " + discountcal);
+        intent.putExtra(Intent.EXTRA_TEXT, "Expedia = " + (new DecimalFormat("##.##").format(hoteltotalcal)) + "\nWaylo = " + (new DecimalFormat("##.##").format(waylototalcal)) + "\nYou save " + (new DecimalFormat("##.##").format(discountcal)));
         startActivity(Intent.createChooser(intent, "Share using"));
+//        textViewDiscount.setText(new DecimalFormat("##.##").format(discountcal));
+
     }
 
+
+    //ToMakeUseOfRadioButton
+
+    public void onClickCheckedButton(View view) {
+
+//        int id = radioGroup.getCheckedRadioButtonId();
+//
+//        switch (id) {
+//            case R.id.radioPerNight:
+//                break;
+//
+//            case R.id.radioTotalTax:
+//                break;
+//        }
+
+    }
 
 }

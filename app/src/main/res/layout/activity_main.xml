@@ -6,6 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:typeface="monospace"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:text="Waylo Price Calculator"
+            android:textSize="20dp" />
+
+
+    </android.support.v7.widget.Toolbar>
+
 
     <LinearLayout
         android:id="@+id/myLinearLayout"
@@ -20,7 +44,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,11 +77,11 @@
 
                 <TextView
                     android:id="@+id/tvHotelPrice"
-                    android:onClick="onClickHotelPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:onClick="onClickHotelPriceTextView"
                     android:text="Hotel Price"
                     android:textAlignment="center"
                     android:textSize="35sp"
@@ -92,7 +116,7 @@
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Discount (e.g. - 0.92)"
+                    android:hint="Discount (in %)"
                     android:inputType="numberDecimal" />
 
             </android.support.design.widget.TextInputLayout>
@@ -111,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:onClick="onClickDiscount"
+                    android:onClick="onClickDiscountTextView"
                     android:text="Discount"
                     android:textAlignment="center"
                     android:textSize="35sp"
@@ -164,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:onClick="onClickDuration"
+                    android:onClick="onClickDurationTextView"
                     android:text="Duration"
                     android:textAlignment="center"
                     android:textSize="35sp"
@@ -197,17 +221,44 @@
 
                 <android.support.design.widget.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Tax (per night)"
+                    android:layout_height="match_parent"
+                    android:hint="Tax"
                     android:inputType="numberDecimal" />
 
             </android.support.design.widget.TextInputLayout>
+
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/radioPerNight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:onClick="onClickCheckedButton"
+                    android:text="Per Night" />
+
+                <RadioButton
+                    android:id="@+id/radioTotalTax"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="onClickCheckedButton"
+                    android:text="Total Tax" />
+
+            </RadioGroup>
+
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:orientation="vertical">
 
 
@@ -217,7 +268,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:onClick="onClickTax"
+                    android:onClick="onClickTaxTextView"
                     android:text="Tax"
                     android:textAlignment="center"
                     android:textSize="35sp"
@@ -270,7 +321,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:onClick="onClickTotalPrice"
+                    android:onClick="onClickTotalPriceTextView"
                     android:text="Total Price"
                     android:textAlignment="center"
                     android:textSize="35sp"
